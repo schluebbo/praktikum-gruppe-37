@@ -1,0 +1,10 @@
+@startuml
+
+/'[Controller] <<..controller..>>
+[Service] <<..service..>>
+[Persi] <<..persistence..>>
+
+[Controller] --> [Service]
+[Service] --> [Persi]'/
+
+@enduml

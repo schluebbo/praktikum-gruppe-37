@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: headerFragment">
+    <title id="pageTitle">PP2: Übersicht</title>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PP2</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="/student">Übersicht</a>
+            </li>
+            <li>
+                <a href="/vacationRegistration">Urlaub Anmelden</a>
+            </li>
+            <li>
+                <a href="/examRegistration">Klausur anmelden</a>
+            </li>
+            <li>
+                <a href="/createExam">Klausur anlegen</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="navbar-btn" aria-label="Seitenleiste schließen">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <h1>Übersicht: Freistellungen</h1>
+        <div class="line"></div>
+        <h2 id="urlaubszeiten">Urlaubszeiten</h2>
+        <table id="vacation_table" class="table mb-5">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>von</th>
+                <th>bis</th>
+                <th>Zeit (min)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vacation: ${vacations}">
+                <td th:text="${vacation.getVacation_date()}">Datum</td>
+                <td th:text="${vacation.getStartTime()}"></td>
+                <td th:text="${vacation.getEndTime()}"></td>
+                <td th:text="${vacation.getDuration()}"></td>
+                <td>
+                    <form th:if="${vacation.isCancelable()} == true" th:object="${cancelForm}" method="post"
+                          th:name="'cancel_' + ${vacation.getVacation_date()} + '_' + ${vacation.getStartTime()}  + '_' + ${vacation.getEndTime()}"
+                          action="/cancelVacation">
+                        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+                        <input type="hidden" name="date" th:value="${vacation.getVacation_date()}">
+                        <input type="hidden" name="startTime" th:value="${vacation.getStartTime()}">
+                        <input type="hidden" name="endTime" th:value="${vacation.getEndTime()}">
+                        <button class="btn bg-danger" style="color: white" aria-label="Urlaub stornieren">Stornieren
+                        </button>
+
+                        <div th:if="${vacation.isCancelable()} == false">
+                            <button class="btn btn-dark" aria-label="Urlaub ist nicht stornierbar" disabled>Nicht
+                                stornierbar
+                            </button>
+                        </div>
+
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td><strong>Summe</strong></td>
+                <td></td>
+                <td></td>
+                <td th:text="${vacationDuration}"><strong>0</strong></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Resturlaub</strong></td>
+                <td></td>
+                <td></td>
+                <td th:text="${remainingVacationTime}"><strong>240</strong></td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="line"></div>
+
+        <h2 id="klausur">Klausuren</h2>
+        <p th:if="${examInfos.isEmpty()} == true" class="alert alert-warning">Sie sind für keine Klausuren
+            angemeldet.</p>
+        <table id="exam_table" class="table mb-5" th:if="${examInfos.isEmpty()} != true">
+            <thead>
+            <tr>
+                <th>Veranstaltung</th>
+                <th>LSF-ID</th>
+                <th>Klausurzeit</th>
+                <th>Freistellung vom Praktikum</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="examInfo: ${examInfos}" th:object="${examInfos}">
+                <td th:text="${examInfo.examName}">Modul</td>
+                <td th:text="${examInfo.lsfId}">LsfID</td>
+                <td th:text="${examInfo.examDate} + ', ' + ${examInfo.examStartTime}  + ' - ' + ${examInfo.examEndTime} + ' Uhr'"></td>
+                <td th:text="${examInfo.startExemption} + ' - ' + ${examInfo.endExemption} + ' Uhr '"></td>
+                <td>
+                    <form method="post" th:if="${examInfo.cancelable} == true"
+                          th:action="@{/examParticipation/{lsfID}/delete(lsfID=${examInfo.lsfId()})}">
+                        <button class="btn bg-danger" style="color: white" aria-label="Klausur stornieren">Stornieren
+                        </button>
+                    </form>
+                    <div th:if="${examInfo.cancelable} == false">
+                        <button class="btn btn-dark" aria-label="Klausur ist nicht stornierbar" disabled>Nicht
+                            stornierbar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div th:replace="fragments :: basic_scripts"></div>
+<div th:replace="fragments :: sidebar"></div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: headerFragment">
+    <title id="pageTitle">PP2: Auditlog Übersicht</title>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PP2</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="/organizer">Übersicht</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="navbar-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <h1>Auditlog</h1>
+        <p th:if="${logInfos.isEmpty()} == true" class="alert alert-warning">Keine Logs vorhanden</p>
+        <table id="audit_table" class="table mb-5" th:if="${logInfos.isEmpty()} != true" >
+            <thead>
+                <tr>
+                    <th>LogID</th>
+                    <th>GithubID</th>
+                    <th>Datum</th>
+                    <th>Beschreibung</th>
+                    <th>Messages</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="summary" th:each="log: ${logInfos}" th:object="${log}">
+                    <td th:text="${log.log_id}">LogID</td>
+                    <td th:text="${log.githubID}">GithubID</td>
+                    <td th:text="${log.date}">Datum</td>
+                    <td th:text="${log.description}">Beschreibung</td>
+                    <td class='expanded-row-content hide-row' th:if="${log.messages()} != null">
+                        <ul th:each="message: ${log.messages()}">
+                            <li th:text="${message}"></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="fragments :: basic_scripts"></div>
+<div th:replace="fragments :: sidebar"></div>
+</body>
+</html>

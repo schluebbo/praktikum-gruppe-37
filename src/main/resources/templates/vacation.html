@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: headerFragment">
+    <title id="pageTitle">PP2: Urlaub anmelden</title>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PP2</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <a href="/student">Übersicht</a>
+            </li>
+            <li class="active">
+                <a href="/vacationRegistration">Urlaub Anmelden</a>
+            </li>
+            <li>
+                <a href="/examRegistration">Klausur anmelden</a>
+            </li>
+            <li>
+                <a href="/createExam">Klausur anlegen</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="navbar-btn" aria-label="Seitenleiste schließen">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <h2>Urlaub anmelden</h2>
+        <form th:object="${form}" name="urlaub_anmelden" class="formular mt-3" method="post"
+              action="/vacationRegistration">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="date" name="date" placeholder="Datum (dd.mm.yyyy)"
+                       aria-label="Tragen Sie hier das Datum ein, an dem Sie ihren Urlaub haben wollen." required>
+                <label for="date">Datum (dd.mm.yyyy)</label>
+                <div id="datum-message" th:if="${messagesDate} != null" th:each="message: ${messagesDate}">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Fehler! </strong> [[${message}]]
+                        <button type="button" class="btn-close" data-dismiss="alert"
+                                aria-label="Fehlermeldung schließen">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="startTime" name="startTime" placeholder="Start (hh:mm)"
+                       aria-label="Tragen Sie hier die Uhrzeit ein, wann Sie Ihren Urlaub beginnen wollen." required>
+                <label for="startTime">Start (hh:mm)</label>
+                <div id="startzeit-message" th:if="${messagesStartTime} != null"
+                     th:each="message: ${messagesStartTime}">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Fehler! </strong> [[${message}]]
+                        <button type="button" class="btn-close" data-dismiss="alert"
+                                aria-label="Fehlermeldung schließen">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="endTime" name="endTime" placeholder="Ende (hh:mm)"
+                       aria-label="Tragen Sie hier die Uhrzeit ein, wann Sie Ihren Urlaub beenden wollen." required>
+                <label for="endTime">Ende (hh:mm)</label>
+                <div id="endezeit-message" th:if="${messagesEndTime} != null" th:each="message: ${messagesEndTime}">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Fehler! </strong> [[${message}]]
+                        <button type="button" class="btn-close" data-dismiss="alert"
+                                aria-label="Fehlermeldung schließen">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="generell-message" th:if="${messages} != null" th:each="message: ${messages}">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Fehler! </strong> [[${message}]]
+                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Fehlermeldung schließen">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+
+            <button name="urlaubsanmeldung_abschicken" class="btn btn-primary btn-block" type="submit"
+                    aria-label="Klicken Sie hier, um den Urlaub einzutragen">Eintragen
+            </button>
+        </form>
+
+        <div class="line"></div>
+    </div>
+</div>
+
+<div th:replace="fragments :: basic_scripts"></div>
+<div th:replace="fragments :: sidebar"></div>
+<div th:replace="fragments :: datetimepicker"></div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+name: chickenbuildtest
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Java install
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run Gradle
+        run: ./gradlew check

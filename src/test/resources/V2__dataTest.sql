@@ -1,0 +1,9 @@
+INSERT INTO EXAM (EXAM_VERSION, LSF_ID, EXAM_DATE, EXAM_START, EXAM_END, EXAM_NAME, EXAM_OFFLINE)
+VALUES (0, 1234, '2024-02-21', '09:30:00', '10:30:00', 'Lehren der Mathematik', FALSE),
+       (0, 5422, '2024-02-22', '11:30:00', '12:30:00', 'Lehren der Physik', TRUE),
+       (0, 6342, '2024-02-23', '10:30:00', '12:30:00', 'Lehren der Chemie', FALSE);
+
+INSERT INTO STUDENT (STUDENT_VERSION, GITHUB_ID, GITHUB_NAME)
+VALUES (1, 123456, 'Johnny'),
+       (1, 542287, 'Günther'),
+       (1, 634223, 'John');

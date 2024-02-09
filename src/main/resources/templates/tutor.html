@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: headerFragment">
+    <title id="pageTitle">PP2: Anmeldung zur Klausur</title>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PP2</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="/tutor">Übersicht</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="navbar-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <h1>Anmeldung zu den Klausuren</h1>
+        <p th:if="${exams.isEmpty()} == true" class="alert alert-warning">Keine Klausuren vorhanden</p>
+        <table id="exam_table" class="table mb-5" th:if="${exams.isEmpty()} != true">
+            <thead>
+            <tr>
+                <th>Veranstaltung</th>
+                <th>Veranstaltungs-ID</th>
+                <th>Onlineklausur</th>
+                <th>Klausurzeit</th>
+                <th>Teilnehmeranzahl</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exam: ${exams}" th:object="${exam}">
+                <td th:text="${exam.examName}">Propra</td>
+                <td th:text="${exam.lsfID}">LsfID</td>
+                <td><span th:text="${exam.offline} ? 'Nein' : 'Ja'"></span></td>
+                <td th:text="${exam.date} + ', ' + ${exam.startTime}  + ' - ' + ${exam.endTime} + ' Uhr'"></td>
+                <td th:text="${exam.numberOfParticipants} != null ? ${exam.numberOfParticipants} : '0' "></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="fragments :: basic_scripts"></div>
+<div th:replace="fragments :: sidebar"></div>
+</body>
+</html>

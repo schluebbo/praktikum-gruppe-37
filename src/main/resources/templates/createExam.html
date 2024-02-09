@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: headerFragment">
+    <title id="pageTitle">PP2: Klausur anlegen</title>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PP2</h3>
+        </div>
+        <div>
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="/student">Übersicht</a>
+                </li>
+                <li>
+                    <a href="/vacationRegistration">Urlaub Anmelden</a>
+                </li>
+                <li>
+                    <a href="/examRegistration">Klausur anmelden</a>
+                </li>
+                <li class="active">
+                    <a href="/createExam">Klausur anlegen</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="navbar-btn" aria-label="Seitenleiste schließen">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <h1>Neue Klausur eintragen</h1>
+        <form name="examForm" class="formular mt-3" method="post" action="/createExam">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="examName" placeholder=" " name="examName" value=""
+                       aria-label="Tragen Sie hier den Namen der Veranstaltung ein." required>
+                <label for="examName">Name der Veranstaltung</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="lsfID" name="lsfID" placeholder="LSF Veranstaltungs-ID"
+                       aria-label="Tragen Sie hier die LSF-ID der Veranstaltung ein." required>
+                <label for="lsfID">ID der Veranstaltung im LSF</label>
+                <div class="form-text" aria-label="Klicken Sie auf diesen Link, um zum LSF zu gelangen.">Sie finden die
+                    LSF Veranstaltungs-ID im <a
+                            href="https://lsf.hhu.de/qisserver/rds?state=wtree&search=1&category=veranstaltung.browse&navigationPosition=lectures%2Clectureindex&breadcrumb=lectureindex&topitem=lectures&subitem=lectureindex"
+                            target="_blank">LSF</a>.
+                </div>
+                <div id="lsfId-message" th:if="${messageLsfID} != null" th:each="message: ${messageLsfID}">
+                    <div class="alert alert-warning alert-dismissible fade show" th:inline="text">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Fehlermeldung schließen"></button>
+                        [[${message}]]
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="präsenz" name="offline" value="true"
+                       checked="checked"><input type="hidden" name="_offline" value="on"/>
+                <label class="form-check-label" for="präsenz"
+                       aria-label="Setzen Sie hier ein Häkchen, wenn die Klausur in Präsenz stattfindet">
+                    Die Klausur findet in Präsenz statt.
+                </label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="date" name="date" placeholder="Datum (dd.mm.yyyy)"
+                       aria-label="Tragen Sie hier das Datum ein, an dem die Veranstaltung stattfindet" required>
+                <label for="date">Datum (dd.mm.yyyy)</label>
+                <div class="form-text">Runden Sie die Startzeit auf die nächste vorgegebene Zeit ab. Falls die Klausur
+                    vor
+                    08:30 Uhr beginnt, tragen Sie bitte 08:30 Uhr ein.
+                </div>
+                <div id="datum-message" th:if="${messagesDate} != null" th:each="message: ${messagesDate}">
+                    <div class="alert alert-warning alert-dismissible fade show" th:inline="text">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Fehlermeldung schließen"></button>
+                        [[${message}]]
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="startTime" name="startTime" placeholder="Start (hh:mm)"
+                       aria-label="Tragen Sie hier die Uhrzeit ein, wann die Veranstaltung beginnt" required>
+                <label for="startTime">Start (hh:mm)</label>
+                <div class="form-text">Runden Sie die Startzeit auf die nächste vorgegebene Zeit ab. Falls die Klausur
+                    vor
+                    08:30 Uhr beginnt, tragen Sie bitte 08:30 Uhr ein.
+                </div>
+                <div id="startzeit-message" th:if="${messagesStartTime} != null"
+                     th:each="message: ${messagesStartTime}">
+                    <div class="alert alert-warning alert-dismissible fade show" th:inline="text">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Fehlermeldung schließen"></button>
+                        [[${message}]]
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="endTime" name="endTime" placeholder="Ende (hh:mm)"
+                       aria-label="Tragen Sie hier die Uhrzeit ein, wann die Veranstaltung endet." required>
+                <label for="endTime">Ende (hh:mm)</label>
+                <div class="form-text">Runden Sie die Zeit auf die nächste vorgegebene Zeit auf. Falls die Klausur nach
+                    13:30 Uhr endet, tragen Sie bitte 13:30 Uhr ein.
+                </div>
+                <div id="endezeit-message" th:if="${messagesEndTime} != null" th:each="message: ${messagesEndTime}">
+                    <div class="alert alert-warning alert-dismissible fade show" th:inline="text">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Fehlermeldung schließen"></button>
+                        [[${message}]]
+                    </div>
+                </div>
+            </div>
+            <button name="submitbtn" class="btn btn-primary btn-block" type="submit"
+                    aria-label="Klicken Sie hier, um die Klausur zu erstellen.">Eintragen
+            </button>
+        </form>
+    </div>
+</div>
+
+<div th:replace="fragments :: basic_scripts"></div>
+<div th:replace="fragments :: sidebar"></div>
+<div th:replace="fragments :: datetimepicker"></div>
+
+</body>
+</html>

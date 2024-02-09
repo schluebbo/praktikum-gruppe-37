@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+chicken:
+  roles:
+    organizer: achang
+    tutor: thull
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: user
+
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+
+  flyway:
+    schemas: chicken_test
+    create-schemas: true
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    user: chicken
+    password: iamchicken
+
+  datasource:
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: chicken
+    password: iamchicken
